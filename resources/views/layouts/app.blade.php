@@ -13,7 +13,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Lavoro | Home 1</title>
+    <title>Nam Trường</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -88,6 +88,15 @@
     <link rel="stylesheet" href="{{asset('css/responsive.css')}}">
 
     <script src="{{asset('js/vendor/modernizr-2.8.3.min.js')}}"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/styles/metro/notify-metro.css" />
+
+    @if(session('notify'))
+        <script>
+            var TYPE_MESSAGE = "{{session('notify.type')}}";
+            var MESSAGE = "{{session('notify.message')}}";
+        </script>
+        @endif
 </head>
 <body class="home-one">
 <!--[if lt IE 8]>
@@ -100,26 +109,6 @@
 @include('components.header')
 <!-- header area end -->
 <!-- start home slider -->
-@if(\Session::has('success'))
-    <div class="alert alert-success alert-dismissible" style="position: fixed;right: 20px;top: 20px;z-index: 999999;">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>Thành công!</strong> {{\Session::get('success')}}
-    </div>
-@endif
-
-@if(\Session::has('warning'))
-    <div class="alert alert-warning alert-dismissible" style="position: fixed;right: 20px;top: 20px;z-index: 999999;">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>Cảnh báo!</strong> {{\Session::get('warning')}}
-    </div>
-@endif
-
-@if(\Session::has('danger'))
-    <div class="alert alert-danger alert-dismissible" style="position: fixed;right: 20px">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>Thất bại!</strong> {{\Session::get('danger')}}
-    </div>
-@endif
 @yield('content')
 <!-- Brand Logo Area End -->
 <!-- FOOTER START -->
@@ -176,6 +165,29 @@
 <!-- main js
 ============================================ -->
 <script src="{{asset('js/main.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
+<script type="text/javascript">
+    if (typeof TYPE_MESSAGE != "undefined")
+    {
+        switch (TYPE_MESSAGE) {
+            case 'success':
+                $.notify(MESSAGE, TYPE_MESSAGE);
+                break;
+            case 'error':
+                $.notify(MESSAGE, TYPE_MESSAGE);
+                break;
+            case 'warn':
+                $.notify(MESSAGE, TYPE_MESSAGE);
+                break;
+        }
+    }
+    $(".js-show-login").click(function (event) {
+        event.preventDefault();
+        $.notify("Bạn phải đăng nhập để thực hiện chức năng này!", "warn");
+        return false;
+    })
+</script>
 @yield('script')
 </body>
 </html>

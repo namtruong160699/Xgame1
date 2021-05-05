@@ -18,22 +18,22 @@ class Product extends Model
     protected $status = [
         1 => [
             'name' => 'Kích hoạt',
-            'class' => 'label-success'
+            'class' => 'btn btn-block btn-info btn-sm'
         ],
         0 => [
             'name' => 'Vô hiệu hóa',
-            'class' => 'label-danger'
+            'class' => 'btn btn-block btn-danger btn-sm'
         ]
     ];
 
     protected $hot = [
         1 => [
             'name' => 'Nổi bật',
-            'class' => 'label-success'
+            'class' => 'btn btn-block btn-success btn-sm'
         ],
         0 => [
             'name' => 'Không',
-            'class' => 'label-default'
+            'class' => 'btn btn-block btn-secondary btn-sm'
         ]
     ];
 

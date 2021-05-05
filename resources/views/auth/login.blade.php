@@ -20,7 +20,7 @@
     <div class="customer-login-area">
         <div class="container">
             <div class="row">
-                <div class="col-md-6 col-xs-12">
+                <div class="col-md-6 col-xs-12 col-md-offset-3">
                     <div class="customer-login my-account">
                         <form method="post" class="login" action="">
                             @csrf
@@ -36,12 +36,12 @@
                                 </p>
                             </div>
                             <div class="form-action">
-                                <p class="lost_password"> <a href="#">Lost your password?</a></p>
+                                <p class="lost_password"> <a href="{{route('get.reset.password')}}">Quên mật khẩu?</a></p>
                                 <div class="actions-log">
                                     <input type="submit" class="button" name="login" value="Đăng nhập">
                                 </div>
-                                <label for="rememberme" class="inline">
-                                    <input name="rememberme" type="checkbox" id="rememberme" value="forever"> Remember me </label>
+{{--                                <label for="rememberme" class="inline">--}}
+{{--                                    <input name="rememberme" type="checkbox" id="rememberme" value="forever"> Remember me </label>--}}
                             </div>
                         </form>
                     </div>

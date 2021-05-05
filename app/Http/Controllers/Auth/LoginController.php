@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\FontendController;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class LoginController extends Controller
+class LoginController extends FontendController
 {
     public function getLogin()
     {
@@ -21,6 +22,7 @@ class LoginController extends Controller
         {
             return redirect()->route('home');
         }
+        return redirect()->back();
     }
     public function getLogout()
     {

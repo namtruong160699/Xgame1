@@ -20,7 +20,7 @@ class CreateTransactionsTable extends Migration
             $table->string('tr_note')->nullable();
             $table->string('tr_address')->nullable();
             $table->string('tr_phone')->nullable();
-            $table->tinyInteger('tr_status')->default(0)->index();
+            $table->tinyInteger('tr_status')->default(1)->index();
             $table->timestamps();
         });
     }

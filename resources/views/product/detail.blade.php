@@ -84,19 +84,14 @@
             </div>
         </div>
     </div>
-    <div class="product-details-area">
+    <div class="product-details-area" id="content_product" data-id="{{$productDetail->id}}">
         <div class="container">
             <div class="row">
                 <div class="col-md-5 col-sm-5 col-xs-12">
                     <div class="zoomWrapper">
                         <div id="img-1" class="zoomWrapper single-zoom">
                             <a href="#">
-                                <div style="height:450px;width:450px;" class="zoomWrapper"><img id="zoom1"
-                                                                                                src="{{asset(pare_url_file($productDetail->pro_avatar))}}"
-                                                                                                data-zoom-image="img/product-details/ex-big-1-1.jpg"
-                                                                                                alt="big-1"
-                                                                                                style="position: absolute;">
-                                </div>
+                                <img id="zoom1" src="{{asset(pare_url_file($productDetail->pro_avatar))}}" data-zoom-image="{{asset('/theme_admin/img/product-details/ex-big-1-1.jpg')}}" alt="big-1">
                             </a>
                         </div>
                     </div>
@@ -119,8 +114,7 @@
                                         @endfor
                                     </div>
                                     <div class="price-boxes">
-                                        <span
-                                            class="new-price">{{number_format($productDetail->pro_price,0,',','.')}} đ</span>
+                                        <span style="color: rgb(255, 52, 37);" class="new-price">{{number_format($productDetail->pro_price,0,',','.')}} ₫</span>
                                     </div>
                                 </div>
                                 <div class="product-desc">
@@ -130,22 +124,21 @@
                                 <div class="actions-e">
                                     <div class="action-buttons-single">
                                         <div class="inputx-content">
-                                            <label for="qty">Quantity:</label>
+                                            <label for="qty">Số lượng:</label>
                                             <input type="text" name="qty" id="qty" maxlength="12" value="1" title="Qty"
                                                    class="input-text qty">
                                         </div>
                                         <div class="add-to-cart">
-                                            <a href="#">Add to cart</a>
+                                            <a href="{{route('add.shopping.cart',$productDetail->id)}}">CHỌN MUA</a>
                                         </div>
                                         <div class="add-to-links">
                                             <div class="add-to-wishlist">
-                                                <a href="#" data-toggle="tooltip" title=""
-                                                   data-original-title="Add to Wishlist"><i class="fa fa-heart"></i></a>
+                                                <a class="{{!\Auth::id() ? 'js-show-login' : 'js-add-favourite'}}" title="Yêu thích" href="{{route('ajax_get.user.add_favourite',$productDetail->id)}}"><i class="fa fa-heart"></i></a>
                                             </div>
-                                            <div class="compare-button">
-                                                <a href="#" data-toggle="tooltip" title=""
-                                                   data-original-title="Compare"><i class="fa fa-refresh"></i></a>
-                                            </div>
+{{--                                            <div class="compare-button">--}}
+{{--                                                <a href="#" data-toggle="tooltip" title=""--}}
+{{--                                                   data-original-title="Compare"><i class="fa fa-refresh"></i></a>--}}
+{{--                                            </div>--}}
                                         </div>
                                     </div>
                                 </div>
@@ -201,7 +194,7 @@
                                     @endforeach
                                 </div>
                                 <div style="width: 20%">
-                                    <a href="" class="js_rating_action"
+                                    <a href="" class="{{\Auth::id() ? 'js_rating_action' : 'js-show-login'}}"
                                        style="width: 200px;background-color: #288ad6;padding: 10px;color: white;border-radius: 5px">Gửi
                                         đánh giá của bạn</a>
                                 </div>
@@ -320,6 +313,43 @@
                     });
                 }
             });
+
+            // Lưu id sản phẩm vào storage
+            let idProduct = $("#content_product").attr('data-id');
+
+            // Lấy giá trị storage
+            let products = localStorage.getItem('products');
+
+            if (products == null)
+            {
+                arrayProduct = new Array();
+                arrayProduct.push(idProduct)
+                localStorage.setItem('products',JSON.stringify(arrayProduct))
+            }else
+            {
+                // Chuyển về mảng
+                products = $.parseJSON(products)
+                if (products.indexOf(idProduct) == -1)
+                {
+                    products.push(idProduct);
+                    localStorage.setItem('products',JSON.stringify(products))
+                }
+                console.log(products)
+            }
+            // Yêu thích sản phẩm
+            $(".js-add-favourite").click(function (event) {
+                event.preventDefault();
+                let $this = $(this);
+                let URL = $this.attr('href');
+                if (URL) {
+                    $.ajax({
+                        method: "POST",
+                        url: URL,
+                    }).done(function (results) {
+                        alert(results.messages);
+                    });
+                }
+            })
         });
     </script>
 @stop

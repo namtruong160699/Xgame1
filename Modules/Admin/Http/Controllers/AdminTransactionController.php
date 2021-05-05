@@ -2,6 +2,7 @@
 
 namespace Modules\Admin\Http\Controllers;
 
+use App\Exports\TransactionExport;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Transaction;
@@ -11,12 +12,30 @@ use Illuminate\Routing\Controller;
 
 class AdminTransactionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $transactions = Transaction::with('user:id,name')->paginate(10);
+        $transactions = Transaction::whereRaw(1);
+
+        if($request->id) $transactions->where('id',$request->id);
+
+        if ($request->phone) $transactions->where('tr_phone', 'like', '%' . $request->phone . '%');
+
+        if ($status = $request->status)
+        {
+            $transactions->where('tr_status',$status);
+        }
+
+        $transactions = $transactions->with('user:id,name')->orderByDesc('id')->paginate(10);
+
+        if ($request->export)
+        {
+//            Gọi tới export excel
+            return \Excel::download(new TransactionExport($transactions), 'don-hang.xlsx');
+        }
 
         $viewdata = [
-            'transactions' => $transactions
+            'transactions' => $transactions,
+            'query'        => $request->query(),
         ];
 
         return view('admin::transaction.index',$viewdata);
@@ -59,5 +78,33 @@ class AdminTransactionController extends Controller
         $transactions->save();
 
         return redirect()->back()->with('success','Xứ lý đơn hàng thành công!');
+    }
+
+    public function delete($id)
+    {
+        $transaction = Transaction::find($id);
+        if ($transaction)
+        {
+            $transaction->delete();
+            \DB::table('orders')->where('or_transaction_id',$id)->delete();
+        }
+        return redirect()->back();
+    }
+
+    public function deleteOrderItem(Request $request,$id)
+    {
+        if ($request->ajax())
+        {
+            $order = Order::find($id);
+            if ($order)
+            {
+                $money = $order->or_qty * $order->or_price;
+                \DB::table('transactions')
+                    ->where('id',$order->or_transaction_id)
+                    ->decrement('tr_total',$money);
+                $order->delete();
+            }
+            return \response(['code' => 200]);
+        }
     }
 }

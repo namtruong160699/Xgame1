@@ -15,7 +15,7 @@
                         <ul>
                             <li class="expand"><a href="/">Trang chủ</a></li>
                             <li class="expand">
-                                <a href="#">Sản phẩm</a>
+                                <a style="cursor: pointer">Sản phẩm</a>
                                 <ul class="restrain sub-menu">
                                     @if(isset($categories))
                                         @foreach($categories as $category)
@@ -27,20 +27,20 @@
                             <li class="expand"><a href="{{route('get.list.article')}}" title="Tin tức">Tin tức</a></li>
                             <li class="expand"><a href="">Giới thiệu</a></li>
                             <li class="expand"><a href="{{route('get.contact')}}">Liên hệ</a></li>
-                            <li class="expand"><a href="#">Pages</a>
-                                <ul class="restrain sub-menu">
-                                    <li><a href="about-us.html">About Us</a></li>
-                                    <li><a href="contact-us.html">Contact Us</a></li>
-                                    <li><a href="checkout.html">Checkout</a></li>
-                                    <li><a href="login.html">Login</a></li>
-                                    <li><a href="product-details.html">Product Details</a></li>
-                                    <li><a href="shop-grid.html">Shop Grid</a></li>
-                                    <li><a href="shop-list.html">Shop List</a></li>
-                                    <li><a href="cart.html">Shopping cart</a></li>
-                                    <li><a href="wishlist.html">Wishlist</a></li>
-                                    <li><a href="404.html">404 Error</a></li>
-                                </ul>
-                            </li>
+    {{--                            <li class="expand"><a href="#">Pages</a>--}}
+    {{--                                <ul class="restrain sub-menu">--}}
+    {{--                                    <li><a href="about-us.html">About Us</a></li>--}}
+    {{--                                    <li><a href="contact-us.html">Contact Us</a></li>--}}
+    {{--                                    <li><a href="checkout.html">Checkout</a></li>--}}
+    {{--                                    <li><a href="login.html">Login</a></li>--}}
+    {{--                                    <li><a href="product-details.html">Product Details</a></li>--}}
+    {{--                                    <li><a href="shop-grid.html">Shop Grid</a></li>--}}
+    {{--                                    <li><a href="shop-list.html">Shop List</a></li>--}}
+    {{--                                    <li><a href="cart.html">Shopping cart</a></li>--}}
+    {{--                                    <li><a href="wishlist.html">Wishlist</a></li>--}}
+    {{--                                    <li><a href="404.html">404 Error</a></li>--}}
+    {{--                                </ul>--}}
+    {{--                            </li>--}}
                         </ul>
                     </nav>
                 </div>
@@ -204,42 +204,29 @@
                             <div class="shopping-carts text-right">
                                 <div class="cart-toggler">
                                     <a href="{{route('get.list.shopping.cart')}}"><i class="icon-bag"></i></a>
-                                    <a href="{{route('get.list.shopping.cart')}}"><span class="cart-quantity">{{\Cart::getContent()->count()}}</span></a>
+                                    <a href="{{route('get.list.shopping.cart')}}"><span class="cart-quantity">{{\Cart::getTotalQuantity()}}</span></a>
                                 </div>
-                                <div class="restrain small-cart-content">
-                                    <ul class="cart-list">
-                                        <li>
-                                            <a class="sm-cart-product" href="product-details.html">
-                                                <img src="{{asset('img/products/sm-products/cart1.jpg')}}" alt="">
-                                            </a>
-                                            <div class="small-cart-detail">
-                                                <a class="remove" href="#"><i class="fa fa-times-circle"></i></a>
-                                                <a href="#" class="edit-btn"><img src="{{asset('img/btn_edit.gif')}}"
-                                                                                  alt="Edit Button"/></a>
-                                                <a class="small-cart-name" href="product-details.html">Voluptas
-                                                    nulla</a>
-                                                <span class="quantitys"><strong>1</strong>x<span>$75.00</span></span>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <a class="sm-cart-product" href="product-details.html">
-                                                <img src="{{asset('img/products/sm-products/cart2.jpg')}}" alt="">
-                                            </a>
-                                            <div class="small-cart-detail">
-                                                <a class="remove" href="#"><i class="fa fa-times-circle"></i></a>
-                                                <a href="#" class="edit-btn"><img src="{{asset('img/btn_edit.gif')}}"
-                                                                                  alt="Edit Button"/></a>
-                                                <a class="small-cart-name" href="product-details.html">Donec ac
-                                                    tempus</a>
-                                                <span class="quantitys"><strong>1</strong>x<span>$75.00</span></span>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                    <p class="total">Subtotal: <span class="amount">$155.00</span></p>
-                                    <p class="buttons">
-                                        <a href="checkout.html" class="button">Checkout</a>
-                                    </p>
-                                </div>
+{{--                                <div class="restrain small-cart-content">--}}
+{{--                                    <ul class="cart-list">--}}
+{{--                                        <li>--}}
+{{--                                            <a class="sm-cart-product" href="product-details.html">--}}
+{{--                                                <img src="{{asset('img/products/sm-products/cart2.jpg')}}" alt="">--}}
+{{--                                            </a>--}}
+{{--                                            <div class="small-cart-detail">--}}
+{{--                                                <a class="remove" href="#"><i class="fa fa-times-circle"></i></a>--}}
+{{--                                                <a href="#" class="edit-btn"><img src="{{asset('img/btn_edit.gif')}}"--}}
+{{--                                                                                  alt="Edit Button"/></a>--}}
+{{--                                                <a class="small-cart-name" href="product-details.html">Donec ac--}}
+{{--                                                    tempus</a>--}}
+{{--                                                <span class="quantitys"><strong>1</strong>x<span>$75.00</span></span>--}}
+{{--                                            </div>--}}
+{{--                                        </li>--}}
+{{--                                    </ul>--}}
+{{--                                    <p class="total">Subtotal: <span class="amount">$155.00</span></p>--}}
+{{--                                    <p class="buttons">--}}
+{{--                                        <a href="{{route('get.list.shopping.cart')}}" class="button">Thanh toán</a>--}}
+{{--                                    </p>--}}
+{{--                                </div>--}}
                             </div>
                         </div>
                     </div>
@@ -270,13 +257,14 @@
                             <a href="#"><i class="fa fa-align-right"></i></a>
                             <ul class="restrain language">
                                 @if(Auth::check())
-                                <li><a href="">Quản lý</a></li>
+                                <li><a href="{{route('user.dashboard')}}">Quản lý</a></li>
                                 <li><a href="">Sản phẩm yêu thích</a></li>
                                 <li><a href="">Giỏ hàng</a></li>
                                 <li><a href="{{route('get.logout.user')}}">Thoát</a></li>
                                 @else
-                                    <li><a href="{{route('get.register')}}">Đăng ký</a></li>
+                                    <li><a href="{{route('get.register')}}">Tạo tài khoản</a></li>
                                     <li><a href="{{route('get.login')}}">Đăng nhập</a></li>
+                                    <li><a href="#">Đăng nhập bằng Google</a></li>
                                 @endif
                             </ul>
                         </div>

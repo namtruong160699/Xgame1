@@ -10,8 +10,24 @@ class Transaction extends Model
     protected $table = 'transactions';
     protected $guarded = ['*'];
 
-    const STATUS_DONE = 1;
-    const STATUS_DEFAULT = 0;
+    const STATUS_DONE = 2;
+    const STATUS_DEFAULT = 1;
+
+    protected $status = [
+        2 => [
+            'name' => 'Đã xử lý',
+            'class' => 'btn btn-block btn-success btn-sm'
+        ],
+        1 => [
+            'name' => 'Chờ xử lý',
+            'class' => 'btn btn-block btn-info btn-sm'
+        ]
+    ];
+
+    public function getStatus()
+    {
+        return array_get($this->status,$this->tr_status,'[N\A]');
+    }
 
     public function user()
     {

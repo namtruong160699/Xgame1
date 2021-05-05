@@ -1,13 +1,23 @@
-@extends('admin::layouts.master')
+@extends('admin::layouts.master',[
+    'page_title' => 'Tạo sản phẩm',
+    'current_menu' => 'product',
+    'menu_open' => 'product',
+])
 @section('content')
-    <div class="page-header">
-        <ol class="breadcrumb">
-            <li><a href="{{route('admin.home')}}" title="Trang chủ">Trang chủ</a></li>
-            <li><a href="{{route('admin.get.list.product')}}" title="Sản phẩm">Sản phẩm</a></li>
-            <li class="active">Thêm mới</li>
-        </ol>
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Sản phẩm</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Thêm mới</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
     </div>
-    <div class="">
-        @include("admin::product.form")
-    </div>
+    @include("admin::product.form")
 @stop

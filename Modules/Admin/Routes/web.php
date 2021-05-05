@@ -10,8 +10,14 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::prefix('authenticate')->group(function (){
+    Route::get('/login', 'AdminAuthController@getLogin')->name('admin.login');
+    Route::post('/login', 'AdminAuthController@postLogin');
 
-Route::prefix('admin')->group(function() {
+    Route::get('/dang-xuat', 'AdminAuthController@logoutAdmin')->name('admin.logout');
+});
+
+Route::prefix('admin')->middleware('CheckLoginAdmin')->group(function() {
     Route::get('/', 'AdminController@index')->name('admin.home');
 
     Route::group(['prefix' => 'category'], function (){
@@ -46,6 +52,8 @@ Route::prefix('admin')->group(function() {
         Route::get('/','AdminTransactionController@index')->name('admin.get.list.transaction');
         Route::get('/view/{id}','AdminTransactionController@viewOrder')->name('admin.get.view.order');
         Route::get('/active/{id}','AdminTransactionController@actionTransaction')->name('admin.get.active.transaction');
+        Route::get('delete/{id}','AdminTransactionController@delete')->name('admin.transaction.delete');
+        Route::get('order-delete/{id}','AdminTransactionController@deleteOrderItem')->name('ajax.admin.transaction.order_item');
     });
 
     //Quản lí đánh giá

@@ -13,7 +13,7 @@ class AdminProductController extends Controller
 {
     public function index(Request $request)
     {
-        $products = Product::with('category:id,c_name');
+        $products = Product::with('category:id,c_name')->orderByDesc('id');
 
         if ($request->name) $products->where('pro_name', 'like', '%' . $request->name . '%');
         if ($request->cate) $products->where('pro_category_id', $request->cate);
@@ -37,7 +37,7 @@ class AdminProductController extends Controller
     public function store(RequestProduct $requestProduct)
     {
         $this->insertOrUpdate($requestProduct);
-        return redirect()->back()->with('success','Thêm mới sản phẩm thành công!');
+        return redirect()->route('admin.get.list.product');
     }
 
     public function edit($id)
@@ -50,7 +50,7 @@ class AdminProductController extends Controller
     public function update(RequestProduct $requestProduct, $id)
     {
         $this->insertOrUpdate($requestProduct, $id);
-        return redirect('admin/product')->with('success','Cập nhật sản phẩm thành công!');
+        return redirect()->route('admin.get.list.product');
     }
 
     public function getCategories()

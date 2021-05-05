@@ -29,7 +29,7 @@ class AdminArticleController extends Controller
     public function store(RequestArticle $requestArticle)
     {
         $this->insertOrUpdate($requestArticle);
-        return redirect()->back();
+        return redirect()->route('admin.get.list.article')->with('success','Thêm mới bài viết thành công!');
     }
     public function edit($id)
     {
@@ -40,7 +40,7 @@ class AdminArticleController extends Controller
     public function update(RequestArticle $requestArticle, $id)
     {
         $this->insertOrUpdate($requestArticle,$id);
-        return redirect()->back();
+        return redirect()->route('admin.get.list.article')->with('success','Cập nhật bài viết thành công!');
     }
 
     public function insertOrUpdate($requestArticle, $id= '')
@@ -76,6 +76,10 @@ class AdminArticleController extends Controller
                     break;
                 case 'active':
                     $article->a_active = $article->a_active ? 0 : 1;
+                    $article->save();
+                    break;
+                case 'hot':
+                    $article->a_hot = $article->a_hot ? 0 : 1;
                     $article->save();
                     break;
             }

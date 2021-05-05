@@ -13,7 +13,7 @@ class AdminCategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::select('id','c_name','c_title_seo','active')->get();
+        $categories = Category::select('id','c_name','c_title_seo','active','c_home')->get();
         $viewData = [
             'categories' => $categories
         ];
@@ -28,7 +28,7 @@ class AdminCategoryController extends Controller
     public function store(RequestCategory $requestCategory)
     {
         $this->insertOrUpdate($requestCategory);
-        return redirect()->back()->with('success','Thêm mới thành công!');
+        return redirect()->route('admin.get.list.category')->with('success','Thêm mới thành công!');
     }
     public function edit($id)
     {
@@ -39,7 +39,7 @@ class AdminCategoryController extends Controller
     public function update(RequestCategory $requestCategory, $id)
     {
         $this->insertOrUpdate($requestCategory, $id);
-        return redirect()->back()->with('success','Cập nhật dữ liệu thành công!');
+        return redirect()->route('admin.get.list.category')->with('success','Cập nhật dữ liệu thành công!');
     }
 
     public function insertOrUpdate($requestCategory, $id='')
@@ -80,6 +80,12 @@ class AdminCategoryController extends Controller
                     break;
                 case 'active':
                     $category->active = $category->active ? 0 : 1;
+                    $messages = 'Cập nhật thành công';
+                    $category->save();
+                    break;
+                case 'home':
+                    $category->c_home = $category->c_home ? 0 : 1;
+                    $messages = 'Cập nhật thành công';
                     $category->save();
                     break;
             }

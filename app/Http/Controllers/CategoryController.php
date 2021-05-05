@@ -70,7 +70,7 @@ class CategoryController extends FontendController
                 }
             }
 
-            $products = $products->paginate(3);
+            $products = $products->paginate(8);
 
             $cateProduct = Category::find($id);
 

@@ -15,7 +15,10 @@ class ArticleController extends FontendController
     public function getListArticle()
     {
         $articles = Article::simplePaginate(5);
-        return view('article.index',compact('articles'));
+
+        $articleHot = Article::where('a_hot',Article::HOT)->get();
+
+        return view('article.index',compact('articles','articleHot'));
     }
     public function getDetailArticle(Request $request)
     {
@@ -25,9 +28,11 @@ class ArticleController extends FontendController
         {
             $articleDetail = Article::find($id);
             $articles = Article::paginate(10);
+            $articleHot = Article::where('a_hot',Article::HOT)->get();
             $viewData = [
                 'articleDetail' => $articleDetail,
-                'articles' => $articles
+                'articles' => $articles,
+                'articleHot' => $articleHot
             ];
 
             return view('article.detail',$viewData);

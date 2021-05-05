@@ -26,7 +26,11 @@ class ShoppingCartController extends FontendController
             $price = $price * (100 - $product->pro_sale) / 100;
         }
         if ($product->pro_number == 0){
-            return redirect()->back()->with('warning','Sản phẩm đã hết hàng!');
+            \Session::flash('notify',[
+                'type' => 'warn',
+                'message' => 'Sản phẩm đã hết hàng.'
+            ]);
+            return redirect()->back();
         }
 
         \Cart::add([
@@ -40,7 +44,11 @@ class ShoppingCartController extends FontendController
                 'price_old' => $product->pro_price
             ],
         ]);
-        return redirect()->back()->with('success','Mua hàng thành công!');
+        \Session::flash('notify',[
+            'type' => 'success',
+            'message' => 'Mua hàng thành công!'
+        ]);
+        return redirect()->back();
     }
 
     public function getListShoppingCart()
@@ -49,6 +57,26 @@ class ShoppingCartController extends FontendController
         return view('shopping.index', compact('products'));
     }
 
+    public function update(Request $request,$id)
+    {
+        if ($request->ajax())
+        {
+            //1. Lấy tham số
+            $qty = $request->qty ?? 1;
+            $idProduct = $request->idProduct;
+            $product = Product::find($idProduct);
+            //2. Kiểm tra tồn tại sản phẩm
+            if (!$product) return response(['messages' => 'Không tồn tại sản phẩm!']);
+            //3. Kiểm tra số lượng sản phẩm còn không
+            if ($product->pro_number < $qty)
+            {
+                return response(['messages' => 'Số lượng sản phẩm không đủ!']);
+            }
+            //4. Update
+            \Cart::update($id, $qty);
+            return response(['messages' => 'Cập nhật sản phẩm thành công!']);
+        }
+    }
     /**
      * Form thanh toán
      */
@@ -61,6 +89,10 @@ class ShoppingCartController extends FontendController
     public function deleteProductItem($key)
     {
         \Cart::remove($key);
+        \Session::flash('notify',[
+            'type' => 'error',
+            'message' => 'Xóa đơn hàng thành công!'
+        ]);
         return redirect()->back();
     }
 
@@ -95,4 +127,5 @@ class ShoppingCartController extends FontendController
         \Cart::clear();
         return redirect('/');
     }
+
 }

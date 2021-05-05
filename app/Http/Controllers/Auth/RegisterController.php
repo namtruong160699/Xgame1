@@ -2,33 +2,68 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
+use App\Http\Controllers\FontendController;
+use App\Http\Requests\RequestRegister;
 use App\User;
-use Illuminate\Foundation\Auth\RegistersUsers;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
+use Mail;
 
-class RegisterController extends Controller
+class RegisterController extends FontendController
 {
     public function getRegister()
     {
         return view('auth.register');
     }
 
-    public function postRegister(Request $request){
+    public function postRegister(RequestRegister $requestRegister){
         $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->phone = $request->phone;
-        $user->password = bcrypt($request->password);
+        $user->name = $requestRegister->name;
+        $user->email = $requestRegister->email;
+        $user->phone = $requestRegister->phone;
+        $user->password = bcrypt($requestRegister->password);
         $user->save();
 
         if ($user->id)
         {
+            $email = $user->email;
+            $code = bcrypt(md5(time().$email));
+            $url = route('user.verify.account',['id' => $user->id,'code' => $code]);
+
+            $user->code_active = $code;
+            $user->time_code_active = Carbon::now();
+            $user->save();
+
+            $data = [
+                'route' => $url
+            ];
+
+            Mail::send('email.verify_account', $data, function ($message) use ($email){
+                $message->to($email,'Verify Account')->subject('Xác nhận tài khoản');
+            });
             return redirect()->route('get.login');
         }
         return redirect()->back();
+    }
+
+//    Xác nhận tài khoản
+    public function verifyAccount(Request $request)
+    {
+        $code = $request->code;
+        $id = $request->id;
+
+        $checkUser = User::where([
+            'code_active' => $code,
+            'id' => $id
+        ])->first();
+
+        if (!$checkUser)
+        {
+            return redirect('/')->with('danger','Xin lỗi! Đường dẫn không tồn tại');
+        }
+
+        $checkUser->active = 2;
+        $checkUser->save();
+        return redirect('/')->with('success','Xác nhận tài khoản thành công');
     }
 }
